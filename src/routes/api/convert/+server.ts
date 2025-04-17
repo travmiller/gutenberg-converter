@@ -1,6 +1,10 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { GEMINI_API_KEY } from '$env/static/private';
+import 'dotenv/config';
+
+// Access API key directly from process.env instead of $env/static/private
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -75,6 +79,11 @@ export const POST: RequestHandler = async ({ request }) => {
 
 		// Import the Gemini SDK and initialize
 		const genAI = await import('@google/genai');
+
+		if (!GEMINI_API_KEY) {
+			return json({ error: 'API key not configured' }, { status: 500 });
+		}
+
 		const ai = new genAI.GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 		// Get the block reference guide if needed
