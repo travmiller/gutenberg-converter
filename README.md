@@ -45,6 +45,23 @@ npm run dev
 
 5. Open your browser and navigate to `http://localhost:5173`
 
+## Deployment to Vercel
+
+1. Push your code to a GitHub repository
+
+2. Import your project in Vercel:
+   - Go to [vercel.com](https://vercel.com) and sign in
+   - Click "Add New" > "Project"
+   - Import your GitHub repository
+   - Set your environment variables:
+     - Add `GEMINI_API_KEY` with your API key value
+
+3. Deploy:
+   - Click "Deploy"
+   - Vercel will automatically detect and deploy your SvelteKit project
+
+4. Your application will be live at the provided Vercel URL
+
 ## Building for Production
 
 To create a production build:

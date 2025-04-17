@@ -2,7 +2,8 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { GEMINI_API_KEY } from '$env/static/private';
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 type GeminiContent = {
 	text?: string;
@@ -23,13 +24,40 @@ type GeminiRequestPayload = {
 
 // Read the block reference guide from the static file
 function getGutenbergBlockReference() {
+	// Define multiple possible paths to try
+	const possiblePaths = [
+		join(process.cwd(), 'static', 'gutenberg-block-reference.txt'),
+		join(process.cwd(), 'public', 'gutenberg-block-reference.txt'),
+		join(process.cwd(), '.vercel/output/static', 'gutenberg-block-reference.txt')
+	];
+
+	// Try ESM path resolution if we're in ESM mode
 	try {
-		const filePath = join(process.cwd(), 'static', 'gutenberg-block-reference.txt');
-		return readFileSync(filePath, 'utf-8');
+		const __filename = fileURLToPath(import.meta.url);
+		const __dirname = dirname(__filename);
+		const rootDir = join(__dirname, '..', '..', '..', '..');
+
+		possiblePaths.push(
+			join(rootDir, 'static', 'gutenberg-block-reference.txt'),
+			join(rootDir, 'public', 'gutenberg-block-reference.txt')
+		);
 	} catch (error) {
-		console.error('Error reading block reference guide:', error);
-		return '';
+		// Not in ESM mode or fileURLToPath not available
+		console.log('Not using ESM path resolution');
 	}
+
+	// Try each path
+	for (const path of possiblePaths) {
+		try {
+			console.log(`Trying to read from: ${path}`);
+			return readFileSync(path, 'utf-8');
+		} catch (error) {
+			// Continue to next path
+		}
+	}
+
+	console.error('Failed to read block reference guide from any location');
+	return '';
 }
 
 export const POST: RequestHandler = async ({ request }) => {
