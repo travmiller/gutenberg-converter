@@ -24,6 +24,7 @@
     "@tailwindcss/typography": "^0.5.15",
     "@tailwindcss/vite": "^4.0.0",
     "@types/node": "^22.14.1",
+    "@types/tailwindcss": "^3.0.11",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-svelte": "^3.0.0",
@@ -39,8 +40,16 @@
     "vite": "^6.2.5"
   },
   "dependencies": {
+    "@codemirror/commands": "^6.8.1",
+    "@codemirror/lang-css": "^6.0.0",
+    "@codemirror/lang-html": "^6.4.9",
+    "@codemirror/lang-php": "^6.0.1",
+    "@codemirror/language": "^6.11.0",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/view": "^6.36.5",
     "@google/genai": "^0.8.0",
     "@google/generative-ai": "^0.24.0",
+    "@lezer/highlight": "^1.2.0",
     "dotenv": "^16.5.0"
   }
 }
